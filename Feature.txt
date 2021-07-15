@@ -1,0 +1,33 @@
+Công nghệ:
+Back end: nodeJS
+Database: MongoDB
+Front end: EJS engine template (HTML, CSS)
+
+Tools:
+Visual Studio code
+MongDB Compass + MongoDB Atlas
+
+Feature:
+Login
+Logout
+Signup
+UpdateProfile (Update Image Profile, Update Cover Image, Update Info)
+getUser (xem thông tin 1 user nào đó, bao gồm 4 tab (thông tin cơ bản, posts, ảnh, video))
+friends (gửi,hủy lời mời kết bạn; accept, reject lời mời kết bạn; chat (chat chỉ dc thực hiện khi 2 người là bạn bè), unfriend (nếu đã kết bạn))
+
+page (tạo page, viết bài trên page, like page, unlike page - chỉ có admin mới có thể viết bài trên page)
+
+group (tạo group, viết bài (dành cho thành viên của group))
+join group/ leave group; send request join group/ cancel request join group (dành cho memnber)
+accept request join group/ reject (dành cho admin của group)
+
+search (1 keyword có thể search cho cả user, page, group)
+
+post bài (cho cả user, page, group)
+like, comment, reply comment, share post
+
+notification (khi like bài, cmt, send request kết bạn, join group, khi lời mời kết bạn được chấp nhận)
+hiển thị newsfeeds (bao gồm bài viết của user, friend, page(đã like) và group(đã join) )
+
+
+

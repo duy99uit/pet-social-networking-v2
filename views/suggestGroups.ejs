@@ -1,0 +1,125 @@
+<%- include ("includes/header") %>
+
+	<style>
+
+	</style>
+
+
+	<section class="premium-section">
+		<div class="gap gray-bg">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="row" id="page-contents">
+
+							<div class="col-md-3">
+								<%- include ("includes/left-sidebar") %>
+							</div>
+
+							<div class="col-lg-6">
+								<div class="central-meta">
+									<div class="groups">
+										<span><i class="fa fa-users"></i> Suggest Groups</span>
+									</div>
+									<ul class="nearby-contct" id="groups_suggest">
+
+
+									</ul>
+									<a href="/groupsSuggest"><div class="lodmore"><button class="btn-view btn-load-more"></button></div></a>
+								</div><!-- photos -->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<script>
+		var isSuggestGroup = true;
+		function showSuggestGroups() {
+			var ajax = new XMLHttpRequest();
+			ajax.open("POST", "/getSuggestGroups", true);
+
+			ajax.onreadystatechange = function () {
+				if (this.readyState == 4 && this.status == 200) {
+					var response = JSON.parse(this.responseText);
+					// console.log(response);
+					var html = "";
+					for (var a = 0; a < response.data.length; a++) {
+						var data = response.data[a];
+						
+						var isMember = false;
+						for (var b = 0; b < data.members.length; b++) {
+							var tempData = data.members[b];
+							if (tempData._id.toString() == user._id.toString()) {
+								isMember = true;
+								break;
+							}
+						}
+
+						if (localStorage.getItem("accessToken")) {
+							if (!isMember) {
+								html += '<li>';
+								html += '<div class="nearly-pepls">';
+								html += '<figure>';
+								html += '<a href="/group/' + data._id + '">';
+								html += '<img src="' + mainURL + '/' + data.coverPhoto + '" style="border-radius: 5px;">';
+								html += '</a>';
+								html += '</figure>';
+
+								html += '<div class="pepl-info">';
+								html += '<h4>';
+								html += '<a href="/group/' + data._id + '">' + data.name + '</a>';
+								html += '</h4>';
+								html += '<span>Public group</span>';
+								html += '<em>' + data.members.length + ' Members</em>';
+								html += '<a href="javascript:void(0);" data-id="' + data._id + '" onclick="toggleJoinGroup(this)"; class="add-butn">Join</a>';
+								html += '</div>';
+								html += '</div>';
+								html += '</li>';
+							}
+
+						}
+
+
+
+
+
+					}
+					document.getElementById("groups_suggest").innerHTML = html;
+
+				}
+			}
+			var formData = new FormData();
+			formData.append("accessToken", localStorage.getItem("accessToken"));
+			ajax.send(formData);
+		}
+		function toggleJoinGroup(self) {
+			var ajax = new XMLHttpRequest();
+			ajax.open("POST", "/toggleJoinGroup", true);
+
+			ajax.onreadystatechange = function () {
+				if (this.readyState == 4 && this.status == 200) {
+					var response = JSON.parse(this.responseText);
+
+					if (response.status == "success") {
+						self.className = "add-butn btn-unfriend";
+						self.innerHTML = "Leave"
+					}
+					if (response.status == "leaved") {
+						self.className = "add-butn";
+						self.innerHTML = "Join"
+					}
+					if (response.status == "error") {
+						alert(response.message);
+					}
+				}
+			};
+			var formData = new FormData();
+			formData.append("accessToken", localStorage.getItem("accessToken"));
+			formData.append("_id", self.getAttribute("data-id"));
+			ajax.send(formData);
+		}
+	</script>
+
+	<%- include ("includes/footer") %>

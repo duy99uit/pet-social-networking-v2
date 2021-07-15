@@ -1,0 +1,3 @@
+add job
+border avatar
+set default avatar

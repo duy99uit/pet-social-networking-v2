@@ -1,0 +1,77 @@
+<aside class="sidebar static">
+    <div class="widget">
+        <h4 class="widget-title" >Friends</h4>
+        <ul class="followers ps-container ps-theme-default ps-active-y"
+            data-ps-id="db9676d3-4c16-65ce-c42a-b7940733b2fa">
+            <div id="friends-widget">
+
+            </div>
+            <!-- <li>
+                <figure><img src="images/resources/friend-avatar2.jpg" alt=""></figure>
+                <div class="friend-meta">
+                    <h4><a href="time-line.html" title="">Kelly Bill</a></h4>
+                    <a href="#" title="" class="underline">Add Friend</a>
+                </div>
+            </li>
+            <li>
+                <figure><img src="images/resources/friend-avatar4.jpg" alt=""></figure>
+                <div class="friend-meta">
+                    <h4><a href="time-line.html" title="">Issabel</a></h4>
+                    <a href="#" title="" class="underline">Add Friend</a>
+                </div>
+            </li>
+            <li>
+                <figure><img src="images/resources/friend-avatar6.jpg" alt=""></figure>
+                <div class="friend-meta">
+                    <h4><a href="time-line.html" title="">Andrew</a></h4>
+                    <a href="#" title="" class="underline">Add Friend</a>
+                </div>
+            </li>
+            <li>
+                <figure><img src="images/resources/friend-avatar8.jpg" alt=""></figure>
+                <div class="friend-meta">
+                    <h4><a href="time-line.html" title="">Sophia</a></h4>
+                    <a href="#" title="" class="underline">Add Friend</a>
+                </div>
+            </li>
+            <li>
+                <figure><img src="images/resources/friend-avatar3.jpg" alt=""></figure>
+                <div class="friend-meta">
+                    <h4><a href="time-line.html" title="">Allen</a></h4>
+                    <a href="#" title="" class="underline">Add Friend</a>
+                </div>
+            </li> -->
+            <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: -100px;">
+                <div class="ps-scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div>
+            </div>
+            <div class="ps-scrollbar-y-rail" style="top: 100px; height: 260px; right: 0px;">
+                <div class="ps-scrollbar-y" tabindex="0" style="top: 73px; height: 187px;"></div>
+            </div>
+        </ul>
+    </div>
+
+</aside>
+<script>
+    var isFriendsWidget = true;
+    function showFriendsWidget() {
+        var html = "";
+        for (var a = 0; a < window.user.friends.length; a++) {
+            var data = window.user.friends[a];
+
+            html += '<li style="display: flex;">';
+            html += '<figure>';
+            html += '<img src="' + mainURL + '/' + data.profileImage + '" style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%;">';
+            html += '</figure>';
+            html += '<div class="friend-meta">';
+            html += '<h4 style="margin-top: 10px;">';
+            html += '<a href="/user/' + data.username + '" style="color: #088dcd;">' + data.name + '</a>';
+            html += '</h4>';
+            html += '</div>';
+            
+            html += '</li>';
+
+
+        }
+        document.getElementById("friends-widget").innerHTML = html;
+    }
+</script>

@@ -1,0 +1,314 @@
+<footer>
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-4 col-md-4">
+				<div class="widget">
+					<div class="foot-logo">
+						<div class="logo">
+							<a href="index-2.html" title=""><img src="../../public/img/footer-logo.png" alt="" style="width: 150px; height: 150px;"></a>
+						</div>	
+						
+					</div>
+					<ul class="location">
+						<li>
+							<i class="ti-map-alt"></i>
+							<p>700000, Petpedia Team, UIT University, HCM City, VN</p>
+						</li>
+						<li>
+							<i class="ti-mobile"></i>
+							<p>+1-56-346 345</p>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="col-lg-2 col-md-4">
+				<div class="widget">
+					<div class="widget-title"><h4>follow</h4></div>
+					<ul class="list-style">
+						<li><i class="fa fa-facebook-square"></i> <a href="#" title="">facebook</a></li>
+						<li><i class="fa fa-twitter-square"></i><a href="#" title="">twitter</a></li>
+						<li><i class="fa fa-instagram"></i><a href="#" title="">instagram</a></li>
+						<li><i class="fa fa-google-plus-square"></i> <a href="#" title="">Google+</a></li>
+						<li><i class="fa fa-pinterest-square"></i> <a href="#" title="">Pintrest</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="col-lg-2 col-md-4">
+				<div class="widget">
+					<div class="widget-title"><h4>Navigate</h4></div>
+					<ul class="list-style">
+						<li><a href="#" title="">about us</a></li>
+						<li><a href="/contact" title="">contact us</a></li>
+						<li><a href="#" title="">terms & Conditions</a></li>
+						<li><a href="#" title="">RSS syndication</a></li>
+						<li><a href="#" title="">Sitemap</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="col-lg-2 col-md-4">
+				<div class="widget">
+					<div class="widget-title"><h4>useful links</h4></div>
+					<ul class="list-style">
+						<li><a href="#" title="">leasing</a></li>
+						<li><a href="#" title="">submit route</a></li>
+						<li><a href="#" title="">how does it work?</a></li>
+						<li><a href="#" title="">agent listings</a></li>
+						<li><a href="#" title="">view All</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="col-lg-2 col-md-4">
+				<div class="widget">
+					<div class="widget-title"><h4>download apps</h4></div>
+					<ul class="colla-apps">
+						<li><a href="#" title=""><i class="fa fa-android"></i>android</a></li>
+						<li><a href="#" title=""><i class="ti-apple"></i>iPhone</a></li>
+						<li><a href="#" title=""><i class="fa fa-windows"></i>Windows</a></li>
+					</ul>
+				</div>
+			</div>
+			
+		</div>
+		<div class="row" style="padding-top: 30px;">
+			<p style="text-align: center;">
+				Your website &copy; <%= new Date().getFullYear() %>
+			</p>
+			
+		</div>
+	</div>
+</footer>
+</div>
+
+<div class="modal fade" id="replyModal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Reply</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+
+			<div class="modal-body">
+				<form onsubmit="return doPostReply(this);">
+					<input type="hidden" name="postId">
+					<input type="hidden" name="commentId">
+					<textarea name="reply" placeholder="Post your reply"></textarea>
+					<button type="submit">Post</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="/public/js/jquery-3.3.1.min.js"></script>
+<script src="/public/js/script.js"></script>
+<script src="/public/js/main.min.js"></script>
+<script src="/public/js/socket.io.js"></script>
+
+<script>
+
+	window.user = null;
+
+	function getUser() {
+
+		if (localStorage.getItem("accessToken")) {
+
+			var ajax = new XMLHttpRequest();
+			ajax.open("POST", "/getUser", true);
+
+			ajax.onreadystatechange = function () {
+				if (this.readyState == 4 && this.status == 200) {
+
+					var response = JSON.parse(this.responseText);
+
+					if (response.status == "success") {
+						window.user = response.data;
+						
+
+						if (typeof isUpdateProfile !== "undefined" && isUpdateProfile) {
+							showProfileData();
+						}
+
+						if (typeof isHomePage !== "undefined" && isHomePage) {
+							showAddPost();
+							showNewsfeed();
+						}
+						if (typeof isTimeline !== "undefined" && isTimeline) {
+							
+							showTimeline();
+						}
+						if (typeof isTimelineUser !== "undefined" && isTimelineUser) {
+							
+							showTimelineUser();
+						}
+
+						if (typeof isSearchResults !== "undefined" && isSearchResults) {
+							showSearchResults();
+						}
+
+						if (typeof isPostDetail !== "undefined" && isPostDetail) {
+							showPostDetails();
+						}
+						if (typeof isFriends !== "undefined" && isFriends) {
+							showFriends();
+						}
+						if (typeof isFriendsWidget !== "undefined" && isFriendsWidget) {
+							showFriendsWidget();
+						}
+						if (typeof isPages !== "undefined" && isPages) {
+							getPages();
+						}
+						if (typeof isPageDetail !== "undefined" && isPageDetail) {
+							getPageDetail();
+						}
+						if (typeof isRightSidebar !== "undefined" && isRightSidebar) {
+							getMyPages();
+						}
+						if (typeof isGroups !== "undefined" && isGroups) {
+							getGroups();
+						}
+						if (typeof isGroupDetail !== "undefined" && isGroupDetail) {
+							getGroupDetail();
+						}
+						if (typeof isSuggestGroup !== "undefined" && isSuggestGroup) {
+							showSuggestGroups();
+						}
+						if (typeof isSuggestPage !== "undefined" && isSuggestPage) {
+							showSuggestPages();
+						}
+						if (typeof isSuggestFriend !== "undefined" && isSuggestFriend) {
+							showSuggestFriends();
+						}
+						if (typeof isNotifications !== "undefined" && isNotifications) {
+							showNotifications();
+							markNotificationsAsRead();
+						} else {
+							var notificationsCount = 0;
+							for (var a = 0; a < window.user.notifications.length; a++) {
+								if (!window.user.notifications[a].isRead) {
+									notificationsCount++;
+								}
+							}
+							if (notificationsCount > 0) {
+								// document.getElementById("notifications-badge").innerHTML = "(" + notificationsCount + ")";
+								document.getElementById("notifications-badge").innerHTML = notificationsCount;
+								
+								
+							}
+						}
+
+					} else {
+						localStorage.removeItem("accessToken");
+					}
+					showMainMenu();
+				}
+			};
+
+			var formData = new FormData();
+			formData.append("accessToken", localStorage.getItem("accessToken"));
+			ajax.send(formData);
+		} else {
+			showMainMenu();
+		}
+	}
+
+	function showMainMenu() {
+		var html = "";
+
+		if (localStorage.getItem("accessToken")) {
+			
+			html += '<li >';
+			html += '<a href="/pages"><i class="fa fa-th-large" aria-hidden="true" style=" margin-top: 20px;"></i> </a> ';
+			html += '<ul style="margin-top: 20px">';
+			html += '<li>';
+			html += '<a href="/createPage">Create Page</a> ';
+
+			html += '</li>';
+			html += '<li>';
+			html += '<a href="/pages">Your Liked Pages</a> ';
+
+			html += '</li>';
+			html += '<li>';
+			html += '<a href="/pagesSuggest">Suggest Pages</a> ';
+
+			html += '</li>';
+			html += '</ul>';
+
+			html += '</li>';
+
+			html += '<li >';
+			html += '<a href="/groups"><i class="fa fa-users" aria-hidden="true" style=" margin-top: 20px;"></i> </a> ';
+			html += '<ul style="margin-top: 20px">';
+			html += '<li>';
+			html += '<a href="/createGroup">Create Group</a> ';
+
+			html += '</li>';
+			html += '<li>';
+			html += '<a href="/groups">Groups</a> ';
+
+			html += '</li>';
+			html += '<li>';
+			html += '<a href="/groupsSuggest">Suggest Groups</a> ';
+
+			html += '</li>';
+			html += '</ul>';
+			html += '</li>';
+
+			html += '<li>';
+			html +='<div class="user-img" id="avatar-user">';
+				html +='<img src="'+ mainURL +"/"+ window.user.profileImage +'" alt="" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;margin-top: 7px;">';
+				html +='<span class="status f-online"></span>';
+				
+				
+				html +='<div class="user-setting">';
+					html +='<a href="#" title=""><span class="status f-online"></span>online</a>';
+					html +='<a href="/timeline" title=""><i class="ti-user"></i> view profile</a>';
+					html +='<a href="/updateProfile" title=""><i class="ti-pencil-alt"></i>edit profile</a>';
+					html +='<a href="/notifications" title=""><i class="ti-target"></i>Notifications</a>';
+					html += '<a href="/changePassword" title=""><i class="ti-settings"></i>Change Password</a>';
+					html +='<a href="/logout" title="" onclick="return doLogout();"><i class="ti-power-off"></i>log out</a>';
+					html +='</div>';
+			html +='</div>';
+			html += '<a href="" class="avatar-name">';
+					
+					html +=window.user.name;
+					html += '</a>';
+			html += '<li>';
+		} else {
+			html += '<li>';
+			html += '<a href="/login" class="btn-login">Login</a>';
+			html += '</li>';
+
+			html += '<li>';
+			html += '<a href="/signup" class="btn-regi">Signup</a>';
+			html += '</li>';
+
+			setTimeout(function(){ window.location.href = "/login"; }, 1000);
+			
+		}
+
+		document.getElementById("main-menu").innerHTML = html;
+	}
+
+	function doLogout() {
+		localStorage.removeItem("accessToken");
+		return true;
+	}
+
+	window.onload = function () {
+		getUser();
+	};
+
+	window.onerror = function (file, line, error) {
+		alert(file + " " + line + " " + error);
+	};
+</script>
+
+<style>
+
+</style>
+
+</body>
+
+</html>

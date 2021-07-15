@@ -1,0 +1,187 @@
+<%- include ("includes/header") %>
+
+    <section>
+        <div class="gap gray-bg">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="offset-md-3 col-md-6">
+                        
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="row" id="page-contents">
+
+                            <div class="col-md-3">
+                                <%- include ("includes/left-sidebar") %>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="timeline-info">
+                                    <ul class="nav nav-tabs">
+                                        <li>
+                                            <a class="active" data-toggle="tab" href="#allpost">All Post</a>
+                                            <a data-toggle="tab" href="#images">Images</a>
+                                            <a data-toggle="tab" href="#videos">Videos</a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div class="central-meta">
+                                    <div class="frnds">
+
+                                        <div class="tab-content">
+                                            <div class="tab-pane active fade show" id="allpost">
+                                                <ul class="nearby-contct" id="search-results"></ul>
+                                                <div class="loadMore" id="all-posts">
+
+                                                </div>
+                                            </div>
+
+                                            <div class="tab-pane active fade" id="images">
+
+                                                <ul class="liked-pages" id="all-images"></ul>
+
+                                            </div>
+
+                                            <div class="tab-pane active fade" id="videos">
+                                                <ul  id="all-videos"></ul>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                            <div class="col-md-3">
+                                <%- include ("includes/right-sidebar") %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        var isTimeline = true;
+
+
+
+        function showTimeline() {
+            var ajax = new XMLHttpRequest();
+            ajax.open("POST", "/getTimeline", true);
+
+            ajax.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+
+                    var response = JSON.parse(this.responseText);
+                    // show all-posts
+                    var html = "";
+                    for (var a = 0; a < response.data.length; a++) {
+                        var data = response.data[a];
+
+                        html += '<div class="central-meta item">';
+                        html += '<div class="user-post">';
+                        html += '<div class="friend-info">';
+
+                        html += '<figure>';
+                        html += '<img src="' + mainURL + "/" + data.user.profileImage + '" style="width: 45px; height: 45px; object-fit: cover;">';
+                        html += '</figure>';
+
+                        html += '<div class="friend-name">';
+                        html += '<ins>';
+                        if (data.type == "post") {
+                            html += '<a href="/user/' + data.user.username + '">';
+                            html += data.user.name;
+                            html += '</a>';
+                        }
+                        else {
+                            html += data.user.name;
+                        }
+                        html += '</ins>';
+
+                        var createdAt = new Date(data.createdAt);
+                        var date = createdAt.getDate() + "";
+                        date = date.padStart(2, "0") + " " + months[createdAt.getMonth()] + ", " + createdAt.getFullYear();
+
+                        html += '<span>Published: ' + date + '</span>';
+                        html += '</div>';
+
+                        html += '<div class="post-meta">';
+
+                        html += '<div class="description">';
+                        html += '<p>';
+                        html += data.caption;
+                        html += '</p>';
+                        html += '</div>';
+
+                        if (data.image != "") {
+                            html += '<img src="' + mainURL + "/" + data.image + '">';
+                        }
+
+                        if (data.video != "") {
+                            html += '<video style="height: 359px; width: 100%;" controls src="' + mainURL + "/" + data.video + '"></video>';
+                        }
+
+                        html += createLikesSection(data);
+                        html += '</div>';
+                        html += '</div>';
+
+                        html += "<div id='post-comments-" + data._id + "'>";
+                        html += createCommentsSection(data);
+                        html += "</div>";
+
+                        html += '</div>';
+                        html += '</div>';
+                    }
+                    document.getElementById("all-posts").innerHTML = html;
+                    //show all images
+                    var html_image = "";
+                    for (var a = 0; a < response.data.length; a++) {
+                        var data = response.data[a];
+
+
+
+
+                        if (data.image != "") {
+                            html_image += '<li>';
+                            html_image += '<div class="f-page">';
+                                html_image += '<a class="strip" href="' + mainURL + "/" + data.image + '" title="" data-strip-group="mygroup" data-strip-group-options="loop: false">';
+                            html_image += '<img src ="' + mainURL + '/' + data.image + '" style="width: 250px; height: 183px; object-fit: cover;">';
+                            html_image +='</a>';
+                            html_image += '</div>';
+                            html_image += '</li>';
+                        }
+
+                    }
+                    document.getElementById("all-images").innerHTML = html_image;
+
+                    //show all videos
+                    var html_video = "";
+                    for (var a = 0; a < response.data.length; a++) {
+                        var data = response.data[a];
+
+
+                        if (data.video != "") {
+                            html_video += '<video style="height: 359px; width: 100%;" controls src="' + mainURL + "/" + data.video + '"></video>';
+                           
+                        }
+
+                    }
+                    document.getElementById("all-videos").innerHTML = html_video;
+
+                }
+            };
+
+            var formData = new FormData();
+            formData.append("accessToken", localStorage.getItem("accessToken"));
+            ajax.send(formData);
+        }
+    </script>
+
+
+    <%- include ("includes/footer") %>

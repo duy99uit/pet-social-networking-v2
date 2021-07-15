@@ -1,0 +1,8 @@
+Install NodeJS
+InstallMongoDB Compass
+Paste connection string to Mongo Compass (file pet-connectionstring.txt);
+Run command :nodemon server.js;
+Open URl: http://localhost:3000/
+
+
+

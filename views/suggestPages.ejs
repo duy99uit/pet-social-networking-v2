@@ -1,0 +1,130 @@
+<%- include ("includes/header") %>
+
+	<style>
+
+	</style>
+
+
+	<section class="premium-section">
+		<div class="gap gray-bg">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="row" id="page-contents">
+
+							<div class="col-md-3">
+								<%- include ("includes/left-sidebar") %>
+							</div>
+
+							<div class="col-lg-6">
+								<div class="central-meta">
+									<div class="groups">
+										<span><i class="fa fa-users"></i> Suggest Page</span>
+									</div>
+									<ul class="nearby-contct" id="pages_suggest">
+										<!-- <li>
+											<div class="nearly-pepls">
+												<figure>
+													<a href="time-line.html" title=""><img src="images/resources/group1.jpg" alt=""></a>
+												</figure>
+												<div class="pepl-info">
+													<h4><a href="time-line.html" title="">funparty</a></h4>
+													<span>public group</span>
+													<em>32k Members</em>
+													<a href="#" title="" class="add-butn" data-ripple="">leave group</a>
+												</div>
+											</div>
+										</li> -->
+										
+									</ul>
+									<a href="/pagesSuggest"><div class="lodmore"><button class="btn-view btn-load-more"></button></div></a>
+								</div><!-- photos -->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<script>
+		var isSuggestPage = true;
+		function showSuggestPages() {
+			var ajax = new XMLHttpRequest();
+			ajax.open("POST", "/getSuggestPages", true);
+
+			ajax.onreadystatechange = function () {
+				if (this.readyState == 4 && this.status == 200) {
+					var response = JSON.parse(this.responseText);
+					// console.log(response);
+					var html = "";
+					for (var a = 0; a < response.data.length; a++) {
+						var data = response.data[a];
+						
+						var isLiked = false;
+						for (var b = 0; b < data.likers.length; b++) {
+							var tempData = data.likers[b];
+							if (tempData._id.toString() == user._id.toString()) {
+								isLiked = true;
+								break;
+							}
+						}
+
+						if (localStorage.getItem("accessToken")) {
+							if (!isLiked) {
+								html += '<li>';
+								html += '<div class="nearly-pepls">';
+								html += '<figure>';
+								html += '<a href="/page/' + data._id + '">';
+								html += '<img src="' + mainURL + '/' + data.coverPhoto + '" style="width: 60px; height: 60px;border-radius: 5px;object-fit:cover">';
+								html += '</a>';
+								html += '</figure>';
+
+								html += '<div class="pepl-info">';
+								html += '<h4>';
+								html += '<a href="/page/' + data._id + '">' + data.name + '</a>';
+								html += '</h4>';
+								html += '<a href="javascript:void(0);" data-id="' + data._id + '" onclick="toggleLikePage(this)"; class="add-butn">Follow Page</a>';
+								html += '</div>';
+								html += '</div>';
+								html += '</li>';
+							}
+
+						}
+					}
+					document.getElementById("pages_suggest").innerHTML = html;
+
+				}
+			}
+			var formData = new FormData();
+			formData.append("accessToken", localStorage.getItem("accessToken"));
+			ajax.send(formData);
+		}
+		function toggleLikePage(self) {
+			var ajax = new XMLHttpRequest();
+			ajax.open("POST", "/toggleLikePage", true);
+
+			ajax.onreadystatechange = function () {
+				if (this.readyState == 4 && this.status == 200) {
+					var response = JSON.parse(this.responseText);
+
+					if (response.status == "success") {
+						self.className = "add-butn btn-unfriend";
+						self.innerHTML = "Unfollow Page"
+					}
+					if (response.status == "unliked") {
+						self.className = "add-butn";
+						self.innerHTML = "Follow Page"
+					}
+					if (response.status == "error") {
+						alert(response.message);
+					}
+				}
+			};
+			var formData = new FormData();
+			formData.append("accessToken", localStorage.getItem("accessToken"));
+			formData.append("_id", self.getAttribute("data-id"));
+			ajax.send(formData);
+		}
+	</script>
+
+	<%- include ("includes/footer") %>

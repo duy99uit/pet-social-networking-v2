@@ -53,6 +53,7 @@
 										<a data-toggle="tab" href="#allpost">Posts</a>
 										<a data-toggle="tab" href="#images">Images</a>
 										<a data-toggle="tab" href="#videos">Videos</a>
+										<a data-toggle="tab" href="#pets">Pet</a>
 									</li>
 								</ul>
 							</div>
@@ -124,6 +125,11 @@
 
 
 										</div>
+										<div class="tab-pane active fade" id="pets">
+											<ul  id="all-pets"></ul>
+
+
+										</div>
 									</div>
 								</div>
 							</div>
@@ -154,6 +160,7 @@ function showTimelineUser() {
 		// console.log(response);
 		// console.log(response.username);
 		response.posts = response.posts.reverse();
+		console.log(response);
 			
 			// show all-posts
 			var html = "";
@@ -257,6 +264,43 @@ function showTimelineUser() {
 
 		
 }
+function showPetInfo() {
+            var ajax = new XMLHttpRequest();
+            ajax.open("POST", "/getPetInfo", true);
+
+            ajax.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+
+                    var response = JSON.parse(this.responseText);
+                    // show all-posts
+                    var html = "";
+                    console.log(response.data);
+                    for (var a = 0; a < response.data.length; a++) {
+                        html += '<li style="margin-bottom: 20px;">';
+						html += '<div class="f-page">';
+						html += '<figure>';
+						html += '<a href="/page/' + response.data[a]._id + '">';
+						html += '<img src ="' + mainURL + '/' + response.data[a].coverPhoto + '" style="width: 250px; height: 183px; object-fit: cover; border-radius: 20px">';
+						html += '</a>';
+						html += '<em>' + response.data[a].likers.length + ' likers</em>';
+						html += '</figure>';
+						html += '<div class ="page-info" style="text-overflow: ellipsis; height: 60px; width: 100%;  overflow: hidden;">';
+						html += '<h5>' + response.data[a].petname + '</h5>';
+						html += '<span >' + response.data[a].petdes + '</span>';
+						html += '</div>';
+						html += '</div>';
+						html += '</li>';
+                        
+                    }
+                    document.getElementById("all-pets").innerHTML = html;
+
+                }
+            };
+
+            var formData = new FormData();
+            formData.append("accessToken", localStorage.getItem("accessToken"));
+            ajax.send(formData);
+        }
 </script>
 
 <%- include ("includes/footer") %>

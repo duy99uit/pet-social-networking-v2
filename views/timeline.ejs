@@ -23,6 +23,7 @@
                                             <a class="active" data-toggle="tab" href="#allpost">All Post</a>
                                             <a data-toggle="tab" href="#images">Images</a>
                                             <a data-toggle="tab" href="#videos">Videos</a>
+                                            <a data-toggle="tab" href="#yourpet">Pet Info</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -46,6 +47,11 @@
 
                                             <div class="tab-pane active fade" id="videos">
                                                 <ul  id="all-videos"></ul>
+
+
+                                            </div>
+                                            <div class="tab-pane active fade" id="yourpet">
+                                                <ul  id="all-pets"></ul>
 
 
                                             </div>
@@ -173,6 +179,44 @@
 
                     }
                     document.getElementById("all-videos").innerHTML = html_video;
+
+                }
+            };
+
+            var formData = new FormData();
+            formData.append("accessToken", localStorage.getItem("accessToken"));
+            ajax.send(formData);
+        }
+        
+        function showPetInfo() {
+            var ajax = new XMLHttpRequest();
+            ajax.open("POST", "/getPetInfo", true);
+
+            ajax.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+
+                    var response = JSON.parse(this.responseText);
+                    // show all-posts
+                    var html = "";
+                    console.log(response.data);
+                    for (var a = 0; a < response.data.length; a++) {
+                        html += '<li style="margin-bottom: 20px;">';
+						html += '<div class="f-page">';
+						html += '<figure>';
+						html += '<a href="/page/' + response.data[a]._id + '">';
+						html += '<img src ="' + mainURL + '/' + response.data[a].coverPhoto + '" style="width: 250px; height: 183px; object-fit: cover; border-radius: 20px">';
+						html += '</a>';
+						html += '<em>' + response.data[a].likers.length + ' likers</em>';
+						html += '</figure>';
+						html += '<div class ="page-info" style="text-overflow: ellipsis; height: 60px; width: 100%;  overflow: hidden;">';
+						html += '<h5>' + response.data[a].petname + '</h5>';
+						html += '<span >' + response.data[a].petdes + '</span>';
+						html += '</div>';
+						html += '</div>';
+						html += '</li>';
+                        
+                    }
+                    document.getElementById("all-pets").innerHTML = html;
 
                 }
             };

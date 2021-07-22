@@ -88,6 +88,7 @@ http.listen(3000, function () {
                       notifications: [],
                       groups: [],
                       posts: [],
+                      pets: [],
                     },
                     function (error, data) {
                       result.json({
@@ -724,6 +725,43 @@ http.listen(3000, function () {
 
               database
                 .collection("posts")
+                .find({
+                  "user._id": {
+                    $in: ids,
+                  },
+                })
+                .sort({
+                  createdAt: -1,
+                })
+                .toArray(function (error, data) {
+                  result.json({
+                    status: "success",
+                    message: "Record has been fetched",
+                    data: data,
+                  });
+                });
+            }
+          }
+        );
+      });
+      app.post("/getPetInfo", function (request, result) {
+        var accessToken = request.fields.accessToken;
+        database.collection("users").findOne(
+          {
+            accessToken: accessToken,
+          },
+          function (error, user) {
+            if (user == null) {
+              result.json({
+                status: "error",
+                message: "User has been logged out. Please login again.",
+              });
+            } else {
+              var ids = [];
+              ids.push(user._id);
+
+              database
+                .collection("pets")
                 .find({
                   "user._id": {
                     $in: ids,
@@ -2814,10 +2852,28 @@ http.listen(3000, function () {
                     },
                   },
                   function (error, data) {
-                    result.json({
-                      status: "success",
-                      message: "Add pet info success.",
-                    });
+                    database.collection("users").updateOne(
+                      {
+                        accessToken: accessToken,
+                      },
+                      {
+                        $push: {
+                          pets: {
+                            _id: data.insertedId,
+                            name: petname,
+                            des: petdes,
+                            detail: petdetail,
+                            photo: coverPhoto,
+                          },
+                        },
+                      },
+                      function (error, data) {
+                        result.json({
+                          status: "success",
+                          message: "Pet info has been created.",
+                        });
+                      }
+                    );
                   }
                 );
               } else {

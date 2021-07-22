@@ -100,6 +100,7 @@
 <script>
 
 	window.user = null;
+	
 
 	function getUser() {
 
@@ -128,10 +129,13 @@
 						if (typeof isTimeline !== "undefined" && isTimeline) {
 							
 							showTimeline();
+							showPetInfo();
+							
 						}
 						if (typeof isTimelineUser !== "undefined" && isTimelineUser) {
 							
 							showTimelineUser();
+							showPetInfo();
 						}
 
 						if (typeof isSearchResults !== "undefined" && isSearchResults) {
@@ -212,10 +216,7 @@
 			html += '<li >';
 			html += '<a href="/pages"><i class="fa fa-th-large" aria-hidden="true" style=" margin-top: 20px;"></i> </a> ';
 			html += '<ul style="margin-top: 20px">';
-			html += '<li>';
-			html += '<a href="/createPage">Create Page</a> ';
-
-			html += '</li>';
+			
 			html += '<li>';
 			html += '<a href="/pages">Your Liked Pages</a> ';
 
@@ -231,10 +232,7 @@
 			html += '<li >';
 			html += '<a href="/groups"><i class="fa fa-users" aria-hidden="true" style=" margin-top: 20px;"></i> </a> ';
 			html += '<ul style="margin-top: 20px">';
-			html += '<li>';
-			html += '<a href="/createGroup">Create Group</a> ';
-
-			html += '</li>';
+			
 			html += '<li>';
 			html += '<a href="/groups">Groups</a> ';
 
@@ -255,7 +253,6 @@
 				html +='<div class="user-setting">';
 					html +='<a href="#" title=""><span class="status f-online"></span>online</a>';
 					html +='<a href="/timeline" title=""><i class="ti-user"></i> view profile</a>';
-					// html +='<a href="/yourpet" title=""><i class="ti-heart"></i> Your Pet</a>';
 					html +='<a href="/updateProfile" title=""><i class="ti-pencil-alt"></i>edit profile</a>';
 					html +='<a href="/notifications" title=""><i class="ti-target"></i>Notifications</a>';
 					html += '<a href="/changePassword" title=""><i class="ti-settings"></i>Change Password</a>';

@@ -94,7 +94,7 @@
 			var html = "";
 
 			html += '<figure>';
-				html += '<img src="' + mainURL + '/' + selectedFriend.profileImage + '">';
+				html += '<img src="' + mainURL + '/' + selectedFriend.profileImage + '" style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%;">';
 			html += '</figure>';
 			html += '<span>' + selectedFriend.name + '</span>';
 			document.getElementById("conversation-head").innerHTML = html;

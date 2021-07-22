@@ -849,6 +849,7 @@
     }
     .sidebar {
         width: 100%;
+        display: none;
     }
     .post-meta .detail {
         width: 61%;
